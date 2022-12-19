@@ -73,6 +73,8 @@ async function handleChangeProductSelection(e) {
 async function handleClickAddFeature(e) {
   e.preventDefault();
 
+  if (!productInput.value) return;
+
   const name = addFeatureInput.value ?? "";
 
   const featureName = productInput.value + name;
