@@ -1,12 +1,5 @@
-import {
-  getAllCookies,
-  getBrowserApis,
-  removeCookie,
-  setCookie,
-} from "./browser.js";
+import { getAllCookies, removeCookie, setCookie } from "./browser.js";
 import { toFeatureListItem } from "./elements.js";
-
-const browserApis = getBrowserApis();
 
 /**
  * @typedef {{ name: string; value: string }} Cookie
