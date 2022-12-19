@@ -2,12 +2,11 @@
   "name": "Feature Flags",
   "version": "0.1.0",
   "description": "Manage your feature flags",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "author": "Simon de Bruijn",
-  "action": {
+  "browser_action": {
     "default_popup": "src/index.html",
     "default_title": "Feature Flags"
   },
-  "permissions": ["cookies", "tabs"],
-  "host_permissions": ["*://*/*"]
+  "permissions": ["cookies", "tabs", "*://*/*"]
 }
