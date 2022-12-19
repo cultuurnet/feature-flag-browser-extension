@@ -1,4 +1,10 @@
-import { getAllCookies, removeCookie, setCookie } from "./browser.js";
+import {
+  getAllCookies,
+  getItemFromStorage,
+  removeCookie,
+  setCookie,
+  setItemToStorage,
+} from "./browser.js";
 import { toFeatureListItem } from "./elements.js";
 
 /**
@@ -66,6 +72,7 @@ async function handleChangeProductSelection(e) {
   }
 
   productInput.value = e.target.value;
+  await setItemToStorage("selectedProductPrefix", e.target.value);
   await loadFeatureFlags();
 }
 
@@ -113,7 +120,15 @@ async function handleDeleteFeature(name) {
 }
 
 async function initialize() {
-  productInput.value = ProductPrefixes.UIT_IN_VLAANDEREN;
+  const { selectedProductPrefix } = await getItemFromStorage(
+    "selectedProductPrefix"
+  );
+  const productPrefix =
+    selectedProductPrefix || ProductPrefixes.UIT_IN_VLAANDEREN;
+
+  productSelect.value = productPrefix;
+  productInput.value = productPrefix;
+
   await loadFeatureFlags();
 }
 

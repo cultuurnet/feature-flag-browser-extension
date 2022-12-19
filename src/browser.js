@@ -108,3 +108,34 @@ export async function removeCookie(featureName) {
     }
   });
 }
+
+/**
+ *
+ * @param {string} name
+ * @returns {Promise<unknown>}
+ */
+export async function getItemFromStorage(name) {
+  return new Promise((resolve, reject) => {
+    try {
+      browserApis.storage.local.get(name, resolve);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+/**
+ *
+ * @param {string} name
+ * @param {string} value
+ * @returns {Promise<unknown>}
+ */
+export async function setItemToStorage(name, value) {
+  return new Promise((resolve, reject) => {
+    try {
+      browserApis.storage.local.set({ [name]: value }, resolve);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

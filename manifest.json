@@ -8,5 +8,5 @@
     "default_popup": "index.html",
     "default_title": "Feature Flags"
   },
-  "permissions": ["cookies", "tabs", "*://*/*"]
+  "permissions": ["cookies", "tabs", "storage", "*://*/*"]
 }
