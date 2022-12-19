@@ -1,4 +1,10 @@
-import { getAllCookies, getBrowserApis, getUrl, setCookie } from "./browser.js";
+import {
+  getAllCookies,
+  getBrowserApis,
+  getUrl,
+  removeCookie,
+  setCookie,
+} from "./browser.js";
 import { toFeatureListItem } from "./elements.js";
 
 const browserApis = getBrowserApis();
@@ -34,7 +40,12 @@ async function loadFeatureFlags() {
   const listItems = allCookies
     .filter(isFeatureFlag)
     .map((cookie) =>
-      toFeatureListItem(cookie, productInput.value, handleChangeSwitchFeature)
+      toFeatureListItem(
+        cookie,
+        productInput.value,
+        handleChangeSwitchFeature,
+        handleDeleteFeature
+      )
     );
 
   featuresList.replaceChildren(...listItems);
@@ -73,9 +84,9 @@ async function handleChangeProductSelection(e) {
 async function handleClickAddFeature(e) {
   e.preventDefault();
 
-  if (!productInput.value) return;
+  if (!productInput.value || !addFeatureInput.value) return;
 
-  const name = addFeatureInput.value ?? "";
+  const name = addFeatureInput.value;
 
   const featureName = productInput.value + name;
 
@@ -91,10 +102,22 @@ async function handleClickAddFeature(e) {
 async function handleChangeSwitchFeature(e) {
   e.preventDefault();
 
-  const featureName = e.target.name;
+  if (!productInput.value || !e.target.name) return;
+
+  const name = e.target.name;
+  const featureName = productInput.value + name;
   const isEnabled = e.target.checked;
 
   await setCookie(featureName, isEnabled);
+}
+
+/**
+ *
+ * @param {string} name
+ */
+async function handleDeleteFeature(name) {
+  await removeCookie(name);
+  await loadFeatureFlags();
 }
 
 async function initialize() {

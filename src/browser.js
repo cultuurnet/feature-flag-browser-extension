@@ -91,3 +91,20 @@ export async function setCookie(featureName, isEnabled) {
     }
   });
 }
+
+/**
+ *
+ * @param {string} featureName
+ * @returns {Promise<unknown>}
+ */
+export async function removeCookie(featureName) {
+  const url = await getUrl();
+
+  return new Promise((resolve, reject) => {
+    try {
+      browserApis.cookies.remove({ url, name: featureName }, () => resolve());
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

@@ -24,9 +24,21 @@ function createCheckbox(name, value) {
  */
 function createLabel(name) {
   const label = document.createElement("label");
-  label.innerText = name + ": ";
+  label.innerText = name;
   label.htmlFor = "checkbox-feature-" + name;
   return label;
+}
+
+/**
+ *
+ * @param {string} name
+ * @returns {HTMLButtonElement}
+ */
+function createButton(name, onClick) {
+  const button = document.createElement("button");
+  button.innerText = name;
+  button.addEventListener("click", onClick);
+  return button;
 }
 
 /**
@@ -34,25 +46,31 @@ function createLabel(name) {
  * @param {Cookie} cookie
  * @param {string} productPrefix
  * @param {(e: InputEvent) => void} onChangeSwitchFeature
+ * @param {(name: string) => void} onDeleteFeature
  * @returns
  */
 export function toFeatureListItem(
   { name, value },
   productPrefix,
-  onChangeSwitchFeature
+  onChangeSwitchFeature,
+  onDeleteFeature
 ) {
   const listItem = document.createElement("li");
   const div = document.createElement("div");
   const nameWithoutPrefix = name.replace(productPrefix, "");
   const label = createLabel(nameWithoutPrefix);
   const checkbox = createCheckbox(nameWithoutPrefix, value);
+  const deleteButton = createButton("🗑", () => onDeleteFeature(name));
+  deleteButton.classList.add("transparent", "small");
 
   checkbox.addEventListener("change", onChangeSwitchFeature);
 
-  div.appendChild(label);
   div.appendChild(checkbox);
+  div.appendChild(label);
 
   listItem.appendChild(div);
+
+  listItem.appendChild(deleteButton);
 
   return listItem;
 }
