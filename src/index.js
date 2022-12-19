@@ -1,3 +1,8 @@
+import { getAllCookies, getBrowserApis, getUrl } from "./browser.js";
+import { toFeatureListItem } from "./elements.js";
+
+const browserApis = getBrowserApis();
+
 /**
  * @typedef {{ name: string; value: string }} Cookie
  */
@@ -8,41 +13,10 @@ const ProductPrefixes = {
   CUSTOM: "custom",
 };
 
-/**
- *
- * @returns {Promise<string>}
- */
-async function getUrl() {
-  // this is only in the case the app gets run outside of the extension ecosystem
-  if (!chrome.tabs) {
-    const href = window.location.href;
-    const url = new URL(href);
-    return url.hostname;
-  }
-
-  const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
-  const tab = tabs.pop();
-  return tab.url ?? "http://127.0.0.1:5500/";
-}
-
-/**
- *
- * @returns {Promise<Cookie[]>} cookies
- */
-async function getAllCookies() {
-  const url = await getUrl();
-  return await chrome.cookies.getAll({ url });
-}
-
 // HTML ELEMENTS
 const featuresList = document.getElementById("features-list");
 const productSelect = document.getElementById("product-select");
 const productInput = document.getElementById("product-input");
-
-// LISTENERS
-// cookies.addChangeListener(loadFeatureFlags);
-productInput.addEventListener("input", handleInputChangeProduct);
-productSelect.addEventListener("input", handleChangeProductSelection);
 
 /**
  *
@@ -55,7 +29,9 @@ function isFeatureFlag({ name }) {
 
 async function loadFeatureFlags() {
   const allCookies = await getAllCookies();
-  const listItems = allCookies.filter(isFeatureFlag).map(toFeatureListItem);
+  const listItems = allCookies
+    .filter(isFeatureFlag)
+    .map((cookie) => toFeatureListItem(cookie, handleChangeSwitchFeature));
 
   featuresList.replaceChildren(...listItems);
 }
@@ -67,33 +43,6 @@ async function loadFeatureFlags() {
 function handleInputChangeProduct(e) {
   e.preventDefault();
   loadFeatureFlags();
-}
-
-/**
- *
- * @param {string} name
- * @param {string} value
- * @returns {HTMLInputElement}
- */
-function createCheckbox(name, value) {
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.name = name;
-  checkbox.checked = value === "true";
-  checkbox.id = "checkbox-feature-" + name;
-  return checkbox;
-}
-
-/**
- *
- * @param {string} name
- * @returns {HTMLLabelElement}
- */
-function createLabel(name) {
-  const label = document.createElement("label");
-  label.innerText = name + ": ";
-  label.htmlFor = "checkbox-feature-" + name;
-  return label;
 }
 
 /**
@@ -130,7 +79,7 @@ async function handleChangeSwitchFeature(e) {
   today.setFullYear(today.getFullYear() + 1);
   const expirationDate = today.getTime() / 1000;
 
-  await chrome.cookies.set({
+  await browserApis.cookies.set({
     url,
     name: feature,
     value: `${isEnabled}`,
@@ -139,30 +88,14 @@ async function handleChangeSwitchFeature(e) {
   });
 }
 
-/**
- *
- * @param {Cookie} cookie
- * @returns {HTMLLIElement}
- */
-function toFeatureListItem({ name, value }) {
-  const listItem = document.createElement("li");
-  const div = document.createElement("div");
-  const label = createLabel(name);
-  const checkbox = createCheckbox(name, value);
-
-  checkbox.addEventListener("change", handleChangeSwitchFeature);
-
-  div.appendChild(label);
-  div.appendChild(checkbox);
-
-  listItem.appendChild(div);
-
-  return listItem;
-}
-
 async function initialize() {
   productInput.value = ProductPrefixes.UIT_IN_VLAANDEREN;
   await loadFeatureFlags();
 }
+
+// LISTENERS
+// cookies.addChangeListener(loadFeatureFlags);
+productInput.addEventListener("input", handleInputChangeProduct);
+productSelect.addEventListener("input", handleChangeProductSelection);
 
 initialize();
