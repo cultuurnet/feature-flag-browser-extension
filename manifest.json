@@ -1,0 +1,13 @@
+{
+  "name": "Feature Flags",
+  "version": "0.1.0",
+  "description": "Manage your client-side feature flags",
+  "manifest_version": 3,
+  "author": "Simon de Bruijn",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Feature Flags"
+  },
+  "permissions": ["cookies", "tabs"],
+  "host_permissions": ["*://*/*"]
+}
