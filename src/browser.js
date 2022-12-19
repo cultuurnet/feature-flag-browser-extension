@@ -112,7 +112,7 @@ export async function removeCookie(featureName) {
 /**
  *
  * @param {string} name
- * @returns {Promise<unknown>}
+ * @returns {Promise<{ [key: string]: string }>}
  */
 export async function getItemFromStorage(name) {
   return new Promise((resolve, reject) => {
