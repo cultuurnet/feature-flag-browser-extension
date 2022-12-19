@@ -49,12 +49,12 @@ productSelect.addEventListener("input", handleChangeProductSelection);
  * @param {Cookie} cookie
  */
 function isFeatureFlag({ name }) {
+  if (!productInput.value) return false;
   return name.startsWith(productInput.value);
 }
 
 async function loadFeatureFlags() {
   const allCookies = await getAllCookies();
-  console.error(JSON.stringify(allCookies));
   const listItems = allCookies.filter(isFeatureFlag).map(toFeatureListItem);
 
   featuresList.replaceChildren(...listItems);
@@ -110,6 +110,7 @@ async function handleChangeProductSelection(e) {
   }
 
   productInput.value = e.target.value;
+  await loadFeatureFlags();
 }
 
 /**
