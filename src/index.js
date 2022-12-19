@@ -103,7 +103,6 @@ async function initialize() {
 }
 
 // LISTENERS
-// cookies.addChangeListener(loadFeatureFlags);
 productInput.addEventListener("input", handleInputChangeProduct);
 productSelect.addEventListener("input", handleChangeProductSelection);
 addFeatureButton.addEventListener("click", handleClickAddFeature);
