@@ -1,7 +1,6 @@
 import {
   getAllCookies,
   getBrowserApis,
-  getUrl,
   removeCookie,
   setCookie,
 } from "./browser.js";
