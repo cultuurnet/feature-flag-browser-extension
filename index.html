@@ -10,19 +10,22 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-    <h1>Feature Flags:</h1>
+    <main>
+      <h1>Feature Flags</h1>
 
-    <div>
-      <label for="product-select">Product: </label>
-      <select name="product" id="product-select">
-        <option value="uiv_ff_">UiTinVlaanderen</option>
-        <option value="ff_">UiTdatabank</option>
-        <option value="custom">Custom</option>
-      </select>
-    </div>
+      <div class="choose-product-container">
+        <label for="product-select">Kies een product: </label>
 
-    <input type="text" name="product" id="product-input" class="hide" />
+        <select name="product" id="product-select">
+          <option value="uiv_ff_">UiTinVlaanderen</option>
+          <option value="ff_">UiTdatabank</option>
+          <option value="custom">Custom</option>
+        </select>
 
-    <ul id="features-list"></ul>
+        <input type="text" name="product" id="product-input" class="hide" />
+      </div>
+
+      <ul id="features-list"></ul>
+    </main>
   </body>
 </html>

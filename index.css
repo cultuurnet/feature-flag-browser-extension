@@ -1,5 +1,43 @@
+h1,
+h2,
+h3 {
+  padding: 0;
+  margin: 0;
+}
+
 body {
-  background-color: cadetblue;
+  padding: 0;
+  margin: 0;
+  min-width: 25rem;
+  min-height: 30rem;
+
+  font-size: 15px;
+
+  color: #25283d;
+}
+
+main {
+  padding: 1rem 2rem;
+}
+
+main h1 {
+  margin-bottom: 1.3rem;
+}
+
+main label {
+  font-weight: 700;
+}
+
+.choose-product-container {
+  margin-bottom: 1rem;
+}
+
+.choose-product-container select {
+  min-width: 10rem;
+}
+
+.choose-product-container > :not(:last-child) {
+  margin-bottom: 0.5rem;
 }
 
 #product-input.hide {
@@ -8,6 +46,8 @@ body {
 
 #features-list {
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 #features-list li {
