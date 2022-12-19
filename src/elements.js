@@ -1,4 +1,8 @@
 /**
+ * @typedef {{ name: string; value: string }} Cookie
+ */
+
+/**
  *
  * @param {string} name
  * @param {string} value
@@ -28,14 +32,20 @@ function createLabel(name) {
 /**
  *
  * @param {Cookie} cookie
+ * @param {string} productPrefix
  * @param {(e: InputEvent) => void} onChangeSwitchFeature
  * @returns
  */
-export function toFeatureListItem({ name, value }, onChangeSwitchFeature) {
+export function toFeatureListItem(
+  { name, value },
+  productPrefix,
+  onChangeSwitchFeature
+) {
   const listItem = document.createElement("li");
   const div = document.createElement("div");
-  const label = createLabel(name);
-  const checkbox = createCheckbox(name, value);
+  const nameWithoutPrefix = name.replace(productPrefix, "");
+  const label = createLabel(nameWithoutPrefix);
+  const checkbox = createCheckbox(nameWithoutPrefix, value);
 
   checkbox.addEventListener("change", onChangeSwitchFeature);
 

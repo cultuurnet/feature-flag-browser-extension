@@ -1,4 +1,4 @@
-import { getAllCookies, getBrowserApis, getUrl } from "./browser.js";
+import { getAllCookies, getBrowserApis, getUrl, setCookie } from "./browser.js";
 import { toFeatureListItem } from "./elements.js";
 
 const browserApis = getBrowserApis();
@@ -17,6 +17,8 @@ const ProductPrefixes = {
 const featuresList = document.getElementById("features-list");
 const productSelect = document.getElementById("product-select");
 const productInput = document.getElementById("product-input");
+const addFeatureInput = document.getElementById("add-feature-input");
+const addFeatureButton = document.getElementById("add-feature-button");
 
 /**
  *
@@ -31,7 +33,9 @@ async function loadFeatureFlags() {
   const allCookies = await getAllCookies();
   const listItems = allCookies
     .filter(isFeatureFlag)
-    .map((cookie) => toFeatureListItem(cookie, handleChangeSwitchFeature));
+    .map((cookie) =>
+      toFeatureListItem(cookie, productInput.value, handleChangeSwitchFeature)
+    );
 
   featuresList.replaceChildren(...listItems);
 }
@@ -64,28 +68,31 @@ async function handleChangeProductSelection(e) {
 
 /**
  *
+ * @param {Event} e
+ */
+async function handleClickAddFeature(e) {
+  e.preventDefault();
+
+  const name = addFeatureInput.value ?? "";
+
+  const featureName = productInput.value + name;
+
+  await setCookie(featureName, false);
+
+  await loadFeatureFlags();
+}
+
+/**
+ *
  * @param {InputEvent} e
  */
 async function handleChangeSwitchFeature(e) {
   e.preventDefault();
 
-  const feature = e.target.name;
+  const featureName = e.target.name;
   const isEnabled = e.target.checked;
 
-  const url = await getUrl();
-
-  // make feature flag expire in one year
-  const today = new Date();
-  today.setFullYear(today.getFullYear() + 1);
-  const expirationDate = today.getTime() / 1000;
-
-  await browserApis.cookies.set({
-    url,
-    name: feature,
-    value: `${isEnabled}`,
-    path: "/",
-    expirationDate,
-  });
+  await setCookie(featureName, isEnabled);
 }
 
 async function initialize() {
@@ -97,5 +104,6 @@ async function initialize() {
 // cookies.addChangeListener(loadFeatureFlags);
 productInput.addEventListener("input", handleInputChangeProduct);
 productSelect.addEventListener("input", handleChangeProductSelection);
+addFeatureButton.addEventListener("click", handleClickAddFeature);
 
 initialize();

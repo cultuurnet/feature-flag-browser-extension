@@ -60,3 +60,34 @@ export async function getAllCookies() {
     }
   });
 }
+
+/**
+ *
+ * @param {string} featureName
+ * @param {boolean} isEnabled
+ * @returns {Promise<unknown>}
+ */
+export async function setCookie(featureName, isEnabled) {
+  const url = await getUrl();
+
+  // make feature flag expire in one year
+  const today = new Date();
+  today.setFullYear(today.getFullYear() + 1);
+  const expirationDate = today.getTime() / 1000;
+
+  return new Promise((resolve, reject) => {
+    try {
+      browserApis.cookies.set({
+        url,
+        name: featureName,
+        value: `${isEnabled}`,
+        path: "/",
+        expirationDate,
+      });
+
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

@@ -45,6 +45,10 @@ main label {
   margin-bottom: 0.5rem;
 }
 
+.add-feature-container > :not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
 #product-input.hide {
   display: none;
 }
@@ -53,6 +57,8 @@ main label {
   list-style-type: none;
   margin: 0;
   padding: 0;
+
+  margin-bottom: 1rem;
 }
 
 #features-list li {
