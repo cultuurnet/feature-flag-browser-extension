@@ -19,13 +19,6 @@ const browserApis = getBrowserApis();
  * @returns {Promise<string>}
  */
 export async function getUrl() {
-  // this is only in the case the app gets run outside of the extension ecosystem
-  if (!browserApis.tabs) {
-    const href = window.location.href;
-    const url = new URL(href);
-    return url.hostname;
-  }
-
   return new Promise((resolve, reject) => {
     try {
       browserApis.tabs.query(
